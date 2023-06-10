@@ -2,7 +2,8 @@
     "name": "SampleScene",
     "rootNamespace": "",
     "references": [
-        "GUID:7a44f95f03aafa847911332fdaf498e6"
+        "GUID:7a44f95f03aafa847911332fdaf498e6",
+        "GUID:e280ff789d4407a47998ba70fab1034b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

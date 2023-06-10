@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 
 using LSL;
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour
     #endregion
 
     public int wave;
+    float timer;
+    int watingTime;
 
     private void Start()
     {
@@ -58,6 +61,9 @@ public class Player : MonoBehaviour
         channel_format_t.cf_int32, hash_marker.ToString());
         outlet = new StreamOutlet(streamInfo_marker);
         startTime = LSL.LSL.local_clock();
+
+        timer = 0.0f;
+        watingTime = 4;
     }
 
     IEnumerator ResolveExpectedStream()
@@ -73,21 +79,67 @@ public class Player : MonoBehaviour
         // float s_freq = inlet.info().nominal_srate();
         int buf_samples = (int)Mathf.Ceil((float)(inlet.info().nominal_srate() * max_chunk_duration));
         // int buf_samples = (int)Mathf.Ceil((float)(inlet.info().nominal_srate()));
-        data_buffer = new float[buf_samples, n_channels]; // float ¹è¿­
+        data_buffer = new float[buf_samples, n_channels]; // float ï¿½è¿­
         timestamp_buffer = new double[buf_samples];
+    }
+
+/*     void PerformAnimationAndIncreaseScore(string triggerName)
+    {
+        animator.SetTrigger(triggerName);
+
+        if (triggerName == "doJump")
+        {
+            Score.Cat = Score.Cat + 1;
+
+        }
+        else if (triggerName == "doHi")
+        {
+            Score.Cat = Score.Cat + 10;
+        }
+        else if (triggerName == "doSit")
+        {
+            Score.Cat = Score.Cat + 100;
+        }
+        else if (triggerName == "isVictory")
+        {
+            Score.Cat = Score.Cat + 1000;
+        }
+    } */
+
+    void IncreaseScore(int wave)
+    {
+        if (wave == 0)
+        {
+            Score.Cat = Score.Cat + 1;
+        }
+        else if (wave == 1)
+        {
+            Score.Cat = Score.Cat + 10;
+        }
+        else if (wave == 2)
+        {
+            Score.Cat = Score.Cat + 100;
+        }
+        else if (wave == 3)
+        {
+            Score.Cat = Score.Cat + 1000;
+        }
     }
 
     private void Update()
     {
+        timer += Time.deltaTime;
+        if (timer > watingTime)
+        {
             Process process = new Process();
 
             process.StartInfo.FileName = @"pythonw";
-            process.StartInfo.Arguments = @"C:\Users\SM-PC\Desktop\Á¹¾÷ÇÁ·ÎÁ§Æ®\unity\cat_ver1\Assets\Suriyun\Scripts\bpf.py";
+            process.StartInfo.Arguments = @"..\Suriyun\Scripts\bpf.py";
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.UseShellExecute = false;
 
-             #region LSL_inlet_update
+            #region LSL_inlet_update
             // LSL - inlet
             if (inlet != null)
             {
@@ -102,7 +154,7 @@ public class Player : MonoBehaviour
                     //UnityEngine.Debug.Log("timestamp_buffer: " + timestamp_buffer);
 
                     float x = data_buffer[samples_returned - 1, 0] * 100;
-                    float y = data_buffer[samples_returned - 1, 1];
+                    float y = data_buffer[samples_returned - 1, 1] * 100;
                     float z = data_buffer[samples_returned - 1, 2] * 100;
                     float a = data_buffer[samples_returned - 1, 3] * 100;
 
@@ -121,42 +173,10 @@ public class Player : MonoBehaviour
                     //double f_data = Double.Parse(output);
                     UnityEngine.Debug.Log(output);
 
-                    int l = data_buffer.GetLength(1);
-
-                    for (int i = 0; i < l; i++)
-                    {
-                        UnityEngine.Debug.Log(data_buffer[1, i]);
-                    }
-                    // UnityEngine.Debug.Log("EEGpow: " + output);
+                    UnityEngine.Debug.Log("EEGpow: " + EEGpow);
                     //double s_freq = #;
                     if (baseline_pow == -999.0f) // unset
                     {
-                        /*if (EEGpow < 0.0f)
-                        {
-                            Debug.Log(EEGpow);
-                            outlet.push_sample(new int[1] { OV_marker });
-                            if (s_freq >= 15 && s_freq <= 30) // alpha
-                            {
-                                wave = 0;
-                                isSatisfied = true;
-                            }
-                            if (s_freq >= 9 && s_freq <= 14) // beta
-                            {
-                                wave = 1;
-                                isSatisfied = true;
-                            }
-                            if (s_freq >= 4 && s_freq <= 8) // theta
-                            {
-                                wave = 2;
-                                isSatisfied = true;
-                            }
-                            if (s_freq >= 1 && s_freq <= 3) // delta
-                            {
-                                wave = 3;
-                                isSatisfied = true;
-                            }
-                        }*/
-                        isSatisfied = true;
                         if (EEGpow != 0.0f)
                         {
                             //Debug.Log(EEGpow);
@@ -197,33 +217,46 @@ public class Player : MonoBehaviour
                             isSatisfied = false;
                     }
                 }
+                #endregion
+
+                if (isSatisfied)
+                {
+                    if (wave == 0)
+                    {
+                        //PerformAnimationAndIncreaseScore("doJump");
+                        animator.SetTrigger("doJump");
+                        UnityEngine.Debug.Log("doJump + 1");
+                    }
+                    else if (wave == 1)
+                    {
+                        //PerformAnimationAndIncreaseScore("doHi");
+                        animator.SetTrigger("doHi");
+                        UnityEngine.Debug.Log("doHi + 10");
+                    }
+                    else if (wave == 2)
+                    {
+                        //PerformAnimationAndIncreaseScore("doSit");
+                        animator.SetTrigger("doSit");
+                        UnityEngine.Debug.Log("doSit + 100");
+                    }
+                    else if (wave == 3)
+                    {
+                        //PerformAnimationAndIncreaseScore("isVictory");
+                        animator.SetTrigger("isVictory");
+                        UnityEngine.Debug.Log("isVictory + 1000");
+                    }
+                    StartCoroutine("Delay", wave);
+                }
             }
-            #endregion
-
-            if (isSatisfied)
-            {
-                if (wave == 0)
-                {
-                    animator.SetTrigger("doJump");
-                }
-                else if (wave == 1)
-                {
-                    animator.SetTrigger("doHi");
-
-                }
-                else if (wave == 2)
-                {
-                    animator.SetTrigger("doSit");
-
-                }
-                else if (wave == 3)
-                {
-                    animator.SetTrigger("isVictory");
-
-                }
-            }
-        
+            timer = 0;
+            isSatisfied = false;
+        }
     }
 
+    IEnumerator Delay(int wave)
+    {
+        yield return new WaitForSeconds(2.25f);
+        IncreaseScore(wave);
+    }
 }
 
