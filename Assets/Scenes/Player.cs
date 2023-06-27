@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
@@ -83,28 +83,28 @@ public class Player : MonoBehaviour
         timestamp_buffer = new double[buf_samples];
     }
 
-/*     void PerformAnimationAndIncreaseScore(string triggerName)
-    {
-        animator.SetTrigger(triggerName);
+    /*     void PerformAnimationAndIncreaseScore(string triggerName)
+        {
+            animator.SetTrigger(triggerName);
 
-        if (triggerName == "doJump")
-        {
-            Score.Cat = Score.Cat + 1;
+            if (triggerName == "doJump")
+            {
+                Score.Cat = Score.Cat + 1;
 
-        }
-        else if (triggerName == "doHi")
-        {
-            Score.Cat = Score.Cat + 10;
-        }
-        else if (triggerName == "doSit")
-        {
-            Score.Cat = Score.Cat + 100;
-        }
-        else if (triggerName == "isVictory")
-        {
-            Score.Cat = Score.Cat + 1000;
-        }
-    } */
+            }
+            else if (triggerName == "doHi")
+            {
+                Score.Cat = Score.Cat + 10;
+            }
+            else if (triggerName == "doSit")
+            {
+                Score.Cat = Score.Cat + 100;
+            }
+            else if (triggerName == "isVictory")
+            {
+                Score.Cat = Score.Cat + 1000;
+            }
+        } */
 
     void IncreaseScore(int wave)
     {
@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
                 int samples_returned = inlet.pull_chunk(data_buffer, timestamp_buffer);
                 //Debug.Log("data_buffer: " + data_buffer);
                 //Debug.Log("timestamp_buffer: " + timestamp_buffer);
-                
+
                 if (samples_returned > 0)
                 {
                     //UnityEngine.Debug.Log("timestamp_buffer: " + timestamp_buffer);
