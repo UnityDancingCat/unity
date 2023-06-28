@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
@@ -8,6 +8,8 @@ using UnityEngine;
 using LSL;
 using LSL4Unity.Utils;
 using System.Collections;
+
+using IronPython.Hosting;
 
 public class Player : MonoBehaviour
 {
@@ -83,28 +85,47 @@ public class Player : MonoBehaviour
         timestamp_buffer = new double[buf_samples];
     }
 
-/*     void PerformAnimationAndIncreaseScore(string triggerName)
+    /*     void PerformAnimationAndIncreaseScore(string triggerName)
+        {
+            animator.SetTrigger(triggerName);
+
+            if (triggerName == "doJump")
+            {
+                Score.Cat = Score.Cat + 1;
+
+            }
+            else if (triggerName == "doHi")
+            {
+                Score.Cat = Score.Cat + 10;
+            }
+            else if (triggerName == "doSit")
+            {
+                Score.Cat = Score.Cat + 100;
+            }
+            else if (triggerName == "isVictory")
+            {
+                Score.Cat = Score.Cat + 1000;
+            }
+        } */
+
+    void bpf()
     {
-        animator.SetTrigger(triggerName);
+        var engine = Python.CreateEngine();
+        var scope = engine.CreateScope();
 
-        if (triggerName == "doJump")
+        try
         {
-            Score.Cat = Score.Cat + 1;
+            var source = engine.CreateScriptSourceFromFile(@"C:\Users\SM-PC\Desktop\졸업프로젝트\unity\Assets\Scenes\test.py");
+            source.Execute(scope);
 
+            var getPythonFuncResult = scope.GetVariable<Func<string>>("bandpassFilter");
+            UnityEngine.Debug.Log("result: " + getPythonFuncResult());
         }
-        else if (triggerName == "doHi")
+        catch (Exception ex)
         {
-            Score.Cat = Score.Cat + 10;
+            UnityEngine.Debug.Log("error message");
         }
-        else if (triggerName == "doSit")
-        {
-            Score.Cat = Score.Cat + 100;
-        }
-        else if (triggerName == "isVictory")
-        {
-            Score.Cat = Score.Cat + 1000;
-        }
-    } */
+    }
 
     void IncreaseScore(int wave)
     {
@@ -128,27 +149,30 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+
         timer += Time.deltaTime;
         if (timer > watingTime)
         {
-            Process process = new Process();
+            /* Process process = new Process();
 
             process.StartInfo.FileName = @"pythonw";
             process.StartInfo.Arguments = @"..\Suriyun\Scripts\bpf.py";
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.UseShellExecute = false; */
+
+            bpf();
 
             #region LSL_inlet_update
             // LSL - inlet
             if (inlet != null)
             {
-                process.Start();
+                // process.Start();
 
                 int samples_returned = inlet.pull_chunk(data_buffer, timestamp_buffer);
                 //Debug.Log("data_buffer: " + data_buffer);
                 //Debug.Log("timestamp_buffer: " + timestamp_buffer);
-                
+
                 if (samples_returned > 0)
                 {
                     //UnityEngine.Debug.Log("timestamp_buffer: " + timestamp_buffer);
@@ -169,9 +193,9 @@ public class Player : MonoBehaviour
                     //process.StandardInput.Flush();
                     //process.StandardInput.Close();
 
-                    string output = process.StandardOutput.ReadToEnd();
+                    // string output = process.StandardOutput.ReadToEnd();
                     //double f_data = Double.Parse(output);
-                    UnityEngine.Debug.Log(output);
+                    // UnityEngine.Debug.Log(output);
 
                     UnityEngine.Debug.Log("EEGpow: " + EEGpow);
                     //double s_freq = #;
