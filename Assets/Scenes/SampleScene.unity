@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c75caa194471ce47a0501e6b7e3a8fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StreamName: 
+  StreamName: LSLExampleAmp
   baseline_pow: -999
   IrregularRate: 1
   moment: 0

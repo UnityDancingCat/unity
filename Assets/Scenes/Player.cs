@@ -9,6 +9,8 @@ using LSL;
 using LSL4Unity.Utils;
 using System.Collections;
 
+using IronPython.Hosting;
+
 public class Player : MonoBehaviour
 {
     private Animator animator;
@@ -106,6 +108,25 @@ public class Player : MonoBehaviour
             }
         } */
 
+    void bpf()
+    {
+        var engine = Python.CreateEngine();
+        var scope = engine.CreateScope();
+
+        try
+        {
+            var source = engine.CreateScriptSourceFromFile(@"C:\Users\SM-PC\Desktop\졸업프로젝트\unity\Assets\Scenes\test.py");
+            source.Execute(scope);
+
+            var getPythonFuncResult = scope.GetVariable<Func<string>>("bandpassFilter");
+            UnityEngine.Debug.Log("result: " + getPythonFuncResult());
+        }
+        catch (Exception ex)
+        {
+            UnityEngine.Debug.Log("error message");
+        }
+    }
+
     void IncreaseScore(int wave)
     {
         if (wave == 0)
@@ -128,22 +149,25 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+
         timer += Time.deltaTime;
         if (timer > watingTime)
         {
-            Process process = new Process();
+            /* Process process = new Process();
 
             process.StartInfo.FileName = @"pythonw";
             process.StartInfo.Arguments = @"..\Suriyun\Scripts\bpf.py";
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.UseShellExecute = false; */
+
+            bpf();
 
             #region LSL_inlet_update
             // LSL - inlet
             if (inlet != null)
             {
-                process.Start();
+                // process.Start();
 
                 int samples_returned = inlet.pull_chunk(data_buffer, timestamp_buffer);
                 //Debug.Log("data_buffer: " + data_buffer);
@@ -169,9 +193,9 @@ public class Player : MonoBehaviour
                     //process.StandardInput.Flush();
                     //process.StandardInput.Close();
 
-                    string output = process.StandardOutput.ReadToEnd();
+                    // string output = process.StandardOutput.ReadToEnd();
                     //double f_data = Double.Parse(output);
-                    UnityEngine.Debug.Log(output);
+                    // UnityEngine.Debug.Log(output);
 
                     UnityEngine.Debug.Log("EEGpow: " + EEGpow);
                     //double s_freq = #;
