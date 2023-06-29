@@ -115,11 +115,11 @@ public class Player : MonoBehaviour
 
         try
         {
-            var source = engine.CreateScriptSourceFromFile(@"C:\Users\SM-PC\Desktop\졸업프로젝트\unity\Assets\Scenes\test.py");
+            var source = engine.CreateScriptSourceFromFile(@"C:\Users\hcila\Desktop\wej\unity\Assets\Scenes\test.py");
             source.Execute(scope);
 
-            var getPythonFuncResult = scope.GetVariable<Func<string>>("bandpassFilter");
-            UnityEngine.Debug.Log("result: " + getPythonFuncResult());
+            var referenceSignals = scope.GetVariable<Func<int, float, >>("getReferenceSignals");
+            UnityEngine.Debug.Log("result: " + referenceSignals());
         }
         catch (Exception ex)
         {
@@ -161,13 +161,13 @@ public class Player : MonoBehaviour
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.UseShellExecute = false; */
 
-            bpf();
 
             #region LSL_inlet_update
             // LSL - inlet
             if (inlet != null)
             {
                 // process.Start();
+                // bpf();
 
                 int samples_returned = inlet.pull_chunk(data_buffer, timestamp_buffer);
                 //Debug.Log("data_buffer: " + data_buffer);
