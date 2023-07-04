@@ -14,7 +14,7 @@ public class SquareImageWithOutline : MonoBehaviour
     private RectTransform rectTransform;
 
     private Vector3[] positions;
-    private int currentPositionIndex = 0;
+    private int[] currentPositionIndex;
 
     private void Start()
     {
@@ -29,14 +29,16 @@ public class SquareImageWithOutline : MonoBehaviour
 
         rectTransform = GetComponent<RectTransform>();
 
-        SetImageAlpha(0.5f);
+        SetImageAlpha(1f);
+
+        currentPositionIndex = new int[10] {1, 1, 2, 3, 0, 3, 1, 2, 1, 1};
 
         positions = new Vector3[]
         {
-            new Vector3(0f, -250f, 0f),
+            new Vector3(0f, -200f, 0f),
             new Vector3(-250f, 0f, 0f),
             new Vector3(250f, 0f, 0f),
-            new Vector3(0f, -250f, 0f)
+            new Vector3(0f, 200f, 0f)
         };
 
         StartCoroutine(MoveOutline());
@@ -44,22 +46,28 @@ public class SquareImageWithOutline : MonoBehaviour
 
     private void SetImageAlpha(float alpha)
     {
-        Color color = image.color;
-        color.a = alpha;
-        image.color = color;
+        // Set the alpha value of the image's material color
+        Color materialColor = image.material.color;
+        materialColor.a = alpha;
+        image.material.color = materialColor;
+
+        // Set the alpha value of the outline's effect color
+        Color effectColor = outline.effectColor;
+        effectColor.a = 1f; // Ensure the outline color remains fully opaque
+        outline.effectColor = effectColor;
     }
 
     private IEnumerator MoveOutline()
     {
-        while (true)
+        for(int i=0; i < currentPositionIndex.Length; i++)
         {
             yield return new WaitForSeconds(moveInterval);
-
-            currentPositionIndex = (currentPositionIndex + 1) % positions.Length;
-            Vector3 targetPosition = positions[currentPositionIndex];
+            
+            Vector3 targetPosition = positions[currentPositionIndex[i]];
 
             // Move the outline to the target position
             rectTransform.anchoredPosition = targetPosition;
-        }
+            UnityEngine.Debug.Log("currentPositionIndex: " + currentPositionIndex[i]);
+        };
     }
 }
