@@ -9,10 +9,6 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using LSL;
-using LSL4Unity.Utils;
-
-
 public class Player : MonoBehaviour
 {
     private Animator animator;
