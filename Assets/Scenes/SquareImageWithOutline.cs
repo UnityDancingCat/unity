@@ -7,7 +7,7 @@ public class SquareImageWithOutline : MonoBehaviour
 {
     public Color outlineColor = Color.red;
     public Vector2 outlineDistance = new Vector2(5f, 5f);
-    public float moveInterval = 7f;
+    public float moveInterval = 4f;
 
     private Image image;
     private Outline outline;
@@ -31,14 +31,15 @@ public class SquareImageWithOutline : MonoBehaviour
 
         SetImageAlpha(1f);
 
-        currentPositionIndex = new int[10] {1, 1, 2, 3, 0, 3, 1, 2, 1, 1};
+        currentPositionIndex = new int[21] {4, 1, 4, 0, 4, 2, 4, 3, 4, 0, 4, 3, 4, 1, 4, 2, 4, 0, 4, 3, 4};
 
         positions = new Vector3[]
         {
-            new Vector3(0f, -200f, 0f),
+            new Vector3(0f, -220f, 0f),
             new Vector3(-250f, 0f, 0f),
             new Vector3(250f, 0f, 0f),
-            new Vector3(0f, 200f, 0f)
+            new Vector3(0f, 220f, 0f),
+            new Vector3(1000f, 1000f, 0f)
         };
 
         StartCoroutine(MoveOutline());
