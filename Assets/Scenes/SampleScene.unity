@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -384,7 +384,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5616669764911222607, guid: baa36186587bd9d4ab769976bbfb187e, type: 3}
   m_PrefabInstance: {fileID: 741075375}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &741075377
+--- !u!114 &741075380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -396,10 +396,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c75caa194471ce47a0501e6b7e3a8fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StreamName: LSLExampleAmp
-  baseline_pow: -999
-  IrregularRate: 1
-  moment: 0
   wave: 0
 --- !u!1 &762974658
 GameObject:
