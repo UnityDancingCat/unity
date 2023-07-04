@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
     bool socketReady = false;
     NetworkStream stream;
 
-    public int wave;
     bool isSatisfied = false;
     float timer;
     int watingTime;
@@ -76,24 +75,24 @@ public class Player : MonoBehaviour
         socketReady = false;
     }
 
-    void IncreaseScore(int wave)
+    void IncreaseScore(char wave)
     {
-        if (wave == 0)
+        if (wave == '0')
         {
             Score.Cat = Score.Cat + 1;
             UnityEngine.Debug.Log("score update");
         }
-        else if (wave == 1)
+        else if (wave == '1')
         {
             Score.Cat = Score.Cat + 10;
             UnityEngine.Debug.Log("score update");
         }
-        else if (wave == 2)
+        else if (wave == '2')
         {
             Score.Cat = Score.Cat + 100;
             UnityEngine.Debug.Log("score update");
         }
-        else if (wave == 3)
+        else if (wave == '3')
         {
             Score.Cat = Score.Cat + 1000;
             UnityEngine.Debug.Log("score update");
@@ -102,58 +101,59 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (timer > watingTime)
-        {
+        //if (timer > watingTime)
+        //{
             if (socketReady)
             {
                 if (stream.DataAvailable)
                 {
                     receivedBuffer = new byte[100];
                     stream.Read(receivedBuffer, 0, receivedBuffer.Length);
-                    string wave = Encoding.UTF8.GetString(receivedBuffer, 0, receivedBuffer.Length);
+                    string str = Encoding.UTF8.GetString(receivedBuffer, 0, receivedBuffer.Length);
+                    char wave = str[26];
                     UnityEngine.Debug.Log(wave);
                     isSatisfied = true;
+                
+                    if (isSatisfied)
+                    {
+                        if (wave == '0')
+                        {
+                            //PerformAnimationAndIncreaseScore("doJump");
+                            animator.SetTrigger("doJump");
+                            UnityEngine.Debug.Log("doJump + 1");
+                        }
+                        else if (wave == '1')
+                        {
+                            //PerformAnimationAndIncreaseScore("doHi");
+                            animator.SetTrigger("doHi");
+                            UnityEngine.Debug.Log("doHi + 10");
+                        }
+                        else if (wave == '2')
+                        {
+                            //PerformAnimationAndIncreaseScore("doSit");
+                            animator.SetTrigger("doSit");
+                            UnityEngine.Debug.Log("doSit + 100");
+                        }
+                        else if (wave == '3')
+                        {
+                            //PerformAnimationAndIncreaseScore("isVictory");
+                            animator.SetTrigger("isVictory");
+                            UnityEngine.Debug.Log("isVictory + 1000");
+                        }
+                    }
+                    StartCoroutine("Delay", wave);
                 }
-            
-                if (isSatisfied)
-                {
-                    if (wave == 0)
-                    {
-                        //PerformAnimationAndIncreaseScore("doJump");
-                        animator.SetTrigger("doJump");
-                        UnityEngine.Debug.Log("doJump + 1");
-                    }
-                    else if (wave == 1)
-                    {
-                        //PerformAnimationAndIncreaseScore("doHi");
-                        animator.SetTrigger("doHi");
-                        UnityEngine.Debug.Log("doHi + 10");
-                    }
-                    else if (wave == 2)
-                    {
-                        //PerformAnimationAndIncreaseScore("doSit");
-                        animator.SetTrigger("doSit");
-                        UnityEngine.Debug.Log("doSit + 100");
-                    }
-                    else if (wave == 3)
-                    {
-                        //PerformAnimationAndIncreaseScore("isVictory");
-                        animator.SetTrigger("isVictory");
-                        UnityEngine.Debug.Log("isVictory + 1000");
-                    }
-                }
-                StartCoroutine("Delay", wave);
             }
             timer = 0;
             isSatisfied = false;
-        }
+        /* }
         else
         {
             timer += Time.deltaTime;
-        }
+        } */
     }
 
-    IEnumerator Delay(int wave)
+    IEnumerator Delay(char wave)
     {
         yield return new WaitForSeconds(2f);
         IncreaseScore(wave);
