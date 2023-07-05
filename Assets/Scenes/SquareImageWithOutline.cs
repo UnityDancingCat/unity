@@ -31,7 +31,7 @@ public class SquareImageWithOutline : MonoBehaviour
 
         SetImageAlpha(1f);
 
-        currentPositionIndex = new int[21] {4, 1, 4, 0, 4, 2, 4, 3, 4, 0, 4, 3, 4, 1, 4, 2, 4, 0, 4, 3, 4};
+        currentPositionIndex = new int[20] {1, 4, 0, 4, 2, 4, 3, 4, 0, 4, 3, 4, 1, 4, 2, 4, 0, 4, 3, 4};
 
         positions = new Vector3[]
         {
