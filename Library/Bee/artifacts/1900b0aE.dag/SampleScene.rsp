@@ -340,7 +340,6 @@
 "Assets/Scenes/FlickeringEffect4.cs"
 "Assets/Scenes/Player.cs"
 "Assets/Scenes/Score.cs"
-"Assets/Scenes/SquareImageWithOutline.cs"
 -langversion:9.0
 
 /deterministic
