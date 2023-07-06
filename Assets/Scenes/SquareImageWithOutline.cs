@@ -14,7 +14,8 @@ public class SquareImageWithOutline : MonoBehaviour
     private RectTransform rectTransform;
 
     private Vector3[] positions;
-    private int[] currentPositionIndex;
+    public List<int> currentPositionIndex;
+    public static int currentPosition;
 
     private void Start()
     {
@@ -31,11 +32,11 @@ public class SquareImageWithOutline : MonoBehaviour
 
         SetImageAlpha(1f);
 
-        currentPositionIndex = new int[20] {1, 4, 0, 4, 2, 4, 3, 4, 0, 4, 3, 4, 1, 4, 2, 4, 0, 4, 3, 4};
+        currentPositionIndex = new List<int>() {4, 0, 4, 1, 4, 1, 4, 1, 4, 2, 4, 3, 4, 0, 4, 3, 4, 1, 4, 2, 4, 0, 4, 3, 4};
 
         positions = new Vector3[]
         {
-            new Vector3(0f, -220f, 0f),
+            new Vector3(0f, -250f, 0f),
             new Vector3(-250f, 0f, 0f),
             new Vector3(250f, 0f, 0f),
             new Vector3(0f, 220f, 0f),
@@ -60,15 +61,16 @@ public class SquareImageWithOutline : MonoBehaviour
 
     private IEnumerator MoveOutline()
     {
-        for(int i=0; i < currentPositionIndex.Length; i++)
+        for(int i=0; i < currentPositionIndex.Count; i++)
         {
             yield return new WaitForSeconds(moveInterval);
-            
-            Vector3 targetPosition = positions[currentPositionIndex[i]];
+
+            currentPosition = currentPositionIndex[i];            
+            Vector3 targetPosition = positions[currentPosition];
 
             // Move the outline to the target position
             rectTransform.anchoredPosition = targetPosition;
-            UnityEngine.Debug.Log("currentPositionIndex: " + currentPositionIndex[i]);
+            // UnityEngine.Debug.Log("currentPositionIndex: " + currentPositionIndex[i]);
         };
     }
 }
